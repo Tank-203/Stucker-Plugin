@@ -18,9 +18,6 @@ public class Help implements CommandExecutor{
 				sender.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Thanks you for using the plugin! Plus it will heal you" );
 				sender.sendMessage(ChatColor.GRAY + "- /lottery ");
 				sender.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Allows you to play the lottery! For a small price though :/" );
-				sender.sendMessage(ChatColor.GRAY + "- /ac ");
-				sender.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "When holding a (4) diamonds and (1) compass in either your off hand and "
-						+ "main hand and do /ac you will be given a Advanced compass, right click to give you your coordinates." );
 				return true;
 			}
 				Player player = (Player) sender;
@@ -30,10 +27,7 @@ public class Help implements CommandExecutor{
 				player.sendMessage(ChatColor.GRAY + "- /chad");
 				player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Thanks you for using the plugin! Plus it will heal you" );
 				player.sendMessage(ChatColor.GRAY + "- /lottery ");
-				player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Allows you to play the lottery! For a small price though :/" );
-				player.sendMessage(ChatColor.GRAY + "- /ac ");
-				player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "When holding a (4) diamonds and (1) compass in either your off hand and "
-						+ "main hand and do /ac you will be given a Advanced compass, right click to give you your coordinates." );
+				player.sendMessage(ChatColor.AQUA + "" + ChatColor.BOLD + "Allows you to play the lottery! For a small price though :/" ):
 				return true;
 		}
 		return false;
