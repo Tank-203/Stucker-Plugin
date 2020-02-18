@@ -7,14 +7,18 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,12 +43,14 @@ public class Main extends JavaPlugin implements Listener{
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		Bukkit.addRecipe(getAdvancedCompass());
+		Bukkit.addRecipe(getEnderChest());
 		this.getServer().getPluginManager().registerEvents(this, this);
 		this.getServer().getPluginManager().registerEvents(new AC(), this);
+		this.getServer().getPluginManager().registerEvents(new Enderchest(), this);
 		this.getCommand("Launch").setExecutor(new Launch());
 		this.getCommand("Chad").setExecutor(new Chad());
 		this.getCommand("Shelp").setExecutor(new Help());
-		this.getCommand("Ac").setExecutor(new AC());
 	}
 	
 	private boolean setupEconomy() {
@@ -118,7 +124,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		public void spin(final Player player) {
-			Inventory inv = Bukkit.createInventory(null, 27, ChatColor.GOLD + "" + ChatColor.BOLD + "Sponsored By Stucker & Vault Pluggin");
+			Inventory inv = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Powered By Stucker & Vault Plugin");
 			shuffle(inv);
 			invs.add(inv);
 			player.openInventory(inv);
@@ -169,5 +175,54 @@ public class Main extends JavaPlugin implements Listener{
 			
 			event.setCancelled(true);
 			return;
+		}
+		
+		public ShapedRecipe getAdvancedCompass() {
+			ItemStack compass = new ItemStack(Material.COMPASS);
+			ItemMeta meta = compass.getItemMeta();
+			meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Advanced Compass");
+			List<String> lore = new ArrayList<String>();
+			lore.add("");
+			lore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Some say this advanced item was forged by witches...");
+			lore.add("");
+			meta.setLore(lore);
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			meta.setUnbreakable(true);
+			
+			compass.setItemMeta(meta);
+			
+			NamespacedKey key = new NamespacedKey(this, "advanced_compass");
+			ShapedRecipe recipe = new ShapedRecipe(key, compass);
+			
+			recipe.shape(" D ", "DCD", " D ");
+			recipe.setIngredient('D', Material.DIAMOND);
+			recipe.setIngredient('C', Material.COMPASS);
+			
+			return recipe;
+		}
+		
+		public ShapedRecipe getEnderChest() {
+			ItemStack endchest = new ItemStack(Material.ENDER_CHEST);
+			ItemMeta meta = endchest.getItemMeta();
+			meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest");
+			List<String> lore = new ArrayList<String>();
+			lore.add("");
+			lore.add(ChatColor.YELLOW + "" + ChatColor.ITALIC + "Some say this advanced item was forged by witches...");
+			lore.add("");
+			meta.setLore(lore);
+			meta.addEnchant(Enchantment.CHANNELING, 5, true);
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+			meta.setUnbreakable(true);
+			
+			endchest.setItemMeta(meta);
+			
+			NamespacedKey key = new NamespacedKey(this, "ender_chest");
+			ShapedRecipe recipe = new ShapedRecipe(key, endchest);
+			
+			recipe.shape("OOO", "OEO", "OOO");
+			recipe.setIngredient('O', Material.OBSIDIAN);
+			recipe.setIngredient('E', Material.ENDER_CHEST);
+			
+			return recipe;
 		}
 }
