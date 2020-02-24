@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -33,8 +34,19 @@ public class Enderchest implements Listener{
 				if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) 
 					if (event.getAction() == Action.RIGHT_CLICK_AIR) {
 						player.openInventory(Enderchest.einv());
-						sender.sendMessage("playsound minecraft:block.ender_chest.open block " + player);
+						Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.ender_chest.open block " + player);
 					}
+	}
+	
+	@EventHandler
+	public void onInvClose(InventoryCloseEvent event) {
+//		Player player = (Player) event.getPlayer();
+		Inventory inv = event.getInventory();
+		
+		if (inv == Enderchest.einv()) {
+			Enderchest.einv().getContents();
+			
+		}
 	}
 	
 	@EventHandler
@@ -44,6 +56,7 @@ public class Enderchest implements Listener{
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
 				event.setCancelled(true);
 				player.openInventory(Enderchest.einv());
+				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.ender_chest.open block " + player);
 			}
 	}
 
