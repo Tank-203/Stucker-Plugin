@@ -35,6 +35,7 @@ public class Main extends JavaPlugin implements Listener{
 	List<Inventory> invs = new ArrayList<Inventory>();
 	public static ItemStack[] contents;
 	private int itemIndex = 0;
+	Inventory einv = Enderchest.einv();
 	
 	@Override
 	public void onEnable() {
@@ -93,7 +94,7 @@ public class Main extends JavaPlugin implements Listener{
 		
 		public void shuffle(Inventory inv) {
 			if (contents == null) {
-				ItemStack[] items = new ItemStack[10];
+				ItemStack[] items = new ItemStack[15];
 				items[0] = new ItemStack(Material.COBBLESTONE, 64);
 				items[1] = new ItemStack(Material.OAK_LOG, 16);
 				items[2] = new ItemStack(Material.DIRT, 1);
@@ -103,7 +104,12 @@ public class Main extends JavaPlugin implements Listener{
 				items[6] = new ItemStack(Material.BLACK_CONCRETE, 64);
 				items[7] = new ItemStack(Material.ENDER_PEARL, 8);
 				items[8] = new ItemStack(Material.ANDESITE, 64);
-				items[9] = new ItemStack(Material.DIAMOND_BLOCK, 5);
+				items[9] = new ItemStack(Material.DIAMOND_BLOCK, 15);
+				items[10] = new ItemStack(Material.BEACON, 1);
+				items[11] = new ItemStack(Material.VILLAGER_SPAWN_EGG, 1);
+				items[12] = new ItemStack(Material.AIR, 1);
+				items[13] = new ItemStack(Material.BOOK, 16);
+				items[14] = new ItemStack(Material.WITHER_SKELETON_SKULL, 1);
 				
 				contents = items;
 			}
@@ -124,7 +130,7 @@ public class Main extends JavaPlugin implements Listener{
 		}
 		
 		public void spin(final Player player) {
-			Inventory inv = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Powered By Stucker & Vault Plugin");
+			Inventory inv = Bukkit.createInventory(null, 27, ChatColor.GOLD + "Powered By Stucker & Vault");
 			shuffle(inv);
 			invs.add(inv);
 			player.openInventory(inv);
