@@ -1,13 +1,15 @@
+***Thanks Cmaaxx or CodedRed for most of this Code!****
+
 package me.Tank203.Stucker;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,45 +18,58 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 public class Enderchest implements Listener{
 	
-	public static Map<String, ItemStack[]> enderchest = new HashMap<String, ItemStack[]>();
-	Inventory einv = Bukkit.createInventory(null, 27, ChatColor.GREEN + "EnderChest!");
-	CommandSender sender;
+    public static Map<UUID, Inventory> menus = new HashMap<UUID, Inventory>();
+    
+	@EventHandler
+    public void onOpenEnderChest(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        if (player.getInventory().getItemInMainHand().getType().equals(Material.ENDER_CHEST))
+		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
+			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore())
+				if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+                if (menus.containsKey(player.getUniqueId())) {
+                    // already has a saved inventory
+                    player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
+                    player.openInventory(menus.get(player.getUniqueId()));
+                    return;
+                }
+                // doesnt have a saved inventory - so create one
+                Inventory inv = Bukkit.createInventory(player, 54, player.getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!");
+                player.openInventory(inv);
+                player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
+                return;
+            }
+    }
 	
 	@EventHandler
-	public void onClick(PlayerInteractEvent event) {
+	public void onOpenEnderChest(BlockPlaceEvent event) {
 		Player player = (Player) event.getPlayer();
-		if (player.getInventory().getItemInMainHand().getType().equals(Material.ENDER_CHEST))
-			if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("EnderChest"))
-				if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) 
-					if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-						if(player.getName().contains(player.getName())) {
-							@SuppressWarnings({ "unlikely-arg-type", "unused" })
-							ItemStack[] inv = enderchest.get(einv);
-							player.openInventory(einv);
-							player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 3.0F, 0.5F);
-						}
-					}
-	}
-	
-	@EventHandler
-	public void onInvClose(InventoryCloseEvent event) {
-		Player player = (Player) event.getPlayer();
-			enderchest.put(player.getName(), einv.getContents());
-			player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_CLOSE, 3.0F, 0.5F);
-	}
-	
-	@EventHandler
-	public void onPlace(BlockPlaceEvent event) {
-		Player player = (Player) event.getPlayer();
-		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains("EnderChest"))
+		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
 				event.setCancelled(true);
-				player.openInventory(einv);
-				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "playsound minecraft:block.ender_chest.open block " + player);
+				if (menus.containsKey(player.getUniqueId())) {
+                    // already has a saved inventory
+                    player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
+                    player.openInventory(menus.get(player.getUniqueId()));
+                    return;
+                }
+                // doesnt have a saved inventory - so create one
+                Inventory inv = Bukkit.createInventory(player, 54, player.getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!");
+                player.openInventory(inv);
+                player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
+                return;
 			}
 	}
+	
+   
+    @EventHandler
+    public void onCloseEnderChest(InventoryCloseEvent event) {
+        if (event.getView().getTitle().contains(event.getPlayer().getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!")) {
+            // save inventory to hashmap
+            menus.put(event.getPlayer().getUniqueId(), event.getInventory());
+        }
+    }
 }
