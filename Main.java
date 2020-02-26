@@ -1,8 +1,11 @@
 package me.Tank203.Stucker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,17 +28,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import io.netty.util.internal.ThreadLocalRandom;
+import me.Tank203.Stucker.Files.DataManager;
+import me.Tank203.Stucker.Enderchest;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class Main extends JavaPlugin implements Listener{
 
+	
+	
+	public static Map<UUID, Inventory> menus = new HashMap<UUID, Inventory>();
 	public static Economy econ = null;
 	public Inventory inv;
 	List<Inventory> invs = new ArrayList<Inventory>();
 	public static ItemStack[] contents;
 	private int itemIndex = 0;
-	Inventory einv = Enderchest.einv();
+	
+	public DataManager data;
 	
 	@Override
 	public void onEnable() {
@@ -44,16 +53,19 @@ public class Main extends JavaPlugin implements Listener{
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		this.data = new DataManager(this);
+		if (this.data.getConfig().contains("data"))
+            this.restoreInventory();
 		Bukkit.addRecipe(getAdvancedCompass());
 		Bukkit.addRecipe(getEnderChest());
 		this.getServer().getPluginManager().registerEvents(this, this);
 		this.getServer().getPluginManager().registerEvents(new AC(), this);
-		this.getServer().getPluginManager().registerEvents(new Enderchest(), this);
+		this.getServer().getPluginManager().registerEvents(new Enderchest(this), this);
 		this.getCommand("Launch").setExecutor(new Launch());
 		this.getCommand("Chad").setExecutor(new Chad());
 		this.getCommand("Shelp").setExecutor(new Help());
-	}
-	
+	}	
+		
 	private boolean setupEconomy() {
 		if(getServer().getPluginManager().getPlugin("Vault") == null) {
 			return false;
@@ -68,8 +80,31 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@Override
 	public void onDisable() {
-		
+		if (!menus.isEmpty())
+            this.saveInventories();
 	}	
+	
+	public void saveInventories() {
+        for (Map.Entry<UUID, Inventory> entry : menus.entrySet()) {
+           
+            Inventory inv = (Inventory) entry.getValue();
+            this.data.getConfig().set("data." + entry.getKey().toString(), inv.getContents());
+        }
+        this.data.saveConfig();
+    }
+	
+	public void restoreInventory() {
+		   
+        this.data.getConfig().getConfigurationSection("data").getKeys(false).forEach(key -> {
+             @SuppressWarnings("unchecked")
+            ItemStack[] content = ((List<ItemStack>) this.data.getConfig().get("data." + key)).toArray(new ItemStack[0]);
+             Player player = Bukkit.getPlayer(UUID.fromString(key));
+             Inventory inv = Bukkit.createInventory(null, 27, player.getName() + "'s EnderChest");
+             inv.setContents(content);
+             menus.put(UUID.fromString(key), inv);
+        });
+       
+    }
 	
 		public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 			if (label.equalsIgnoreCase("lottery")) {
