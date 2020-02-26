@@ -2,9 +2,6 @@
 
 package me.Tank203.Stucker;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,19 +18,23 @@ import org.bukkit.inventory.Inventory;
 
 public class Enderchest implements Listener{
 	
-    public static Map<UUID, Inventory> menus = new HashMap<UUID, Inventory>();
-    
-	@EventHandler
+    static Main plugin;
+    public Enderchest(Main instance) {
+    plugin = instance;
+    }
+
+
+    @EventHandler
     public void onOpenEnderChest(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         if (player.getInventory().getItemInMainHand().getType().equals(Material.ENDER_CHEST))
 		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore())
 				if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (menus.containsKey(player.getUniqueId())) {
+                if (Main.menus.containsKey(player.getUniqueId())) {
                     // already has a saved inventory
                     player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
-                    player.openInventory(menus.get(player.getUniqueId()));
+                    player.openInventory(Main.menus.get(player.getUniqueId()));
                     return;
                 }
                 // doesnt have a saved inventory - so create one
@@ -50,10 +51,10 @@ public class Enderchest implements Listener{
 		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
 				event.setCancelled(true);
-				if (menus.containsKey(player.getUniqueId())) {
+				if (Main.menus.containsKey(player.getUniqueId())) {
                     // already has a saved inventory
                     player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
-                    player.openInventory(menus.get(player.getUniqueId()));
+                    player.openInventory(Main.menus.get(player.getUniqueId()));
                     return;
                 }
                 // doesnt have a saved inventory - so create one
@@ -69,7 +70,7 @@ public class Enderchest implements Listener{
     public void onCloseEnderChest(InventoryCloseEvent event) {
         if (event.getView().getTitle().contains(event.getPlayer().getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!")) {
             // save inventory to hashmap
-            menus.put(event.getPlayer().getUniqueId(), event.getInventory());
+            Main.menus.put(event.getPlayer().getUniqueId(), event.getInventory());
         }
     }
 }
