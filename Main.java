@@ -36,15 +36,13 @@ import net.milkbowl.vault.economy.EconomyResponse;
 public class Main extends JavaPlugin implements Listener{
 
 	
-	
+	public DataManager data;
 	public static Map<UUID, Inventory> menus = new HashMap<UUID, Inventory>();
 	public static Economy econ = null;
 	public Inventory inv;
 	List<Inventory> invs = new ArrayList<Inventory>();
 	public static ItemStack[] contents;
 	private int itemIndex = 0;
-	
-	public DataManager data;
 	
 	@Override
 	public void onEnable() {
@@ -54,8 +52,6 @@ public class Main extends JavaPlugin implements Listener{
 			return;
 		}
 		this.data = new DataManager(this);
-		if (this.data.getConfig().contains("data"))
-            this.restoreInventory();
 		Bukkit.addRecipe(getAdvancedCompass());
 		Bukkit.addRecipe(getEnderChest());
 		this.getServer().getPluginManager().registerEvents(this, this);
@@ -64,6 +60,8 @@ public class Main extends JavaPlugin implements Listener{
 		this.getCommand("Launch").setExecutor(new Launch());
 		this.getCommand("Chad").setExecutor(new Chad());
 		this.getCommand("Shelp").setExecutor(new Help());
+		if (this.data.getConfig().contains("data"))
+            this.restoreInventory();
 	}	
 		
 	private boolean setupEconomy() {
@@ -99,7 +97,7 @@ public class Main extends JavaPlugin implements Listener{
              @SuppressWarnings("unchecked")
             ItemStack[] content = ((List<ItemStack>) this.data.getConfig().get("data." + key)).toArray(new ItemStack[0]);
              Player player = Bukkit.getPlayer(UUID.fromString(key));
-             Inventory inv = Bukkit.createInventory(null, 27, player.getName() + "'s EnderChest");
+             Inventory inv = Bukkit.createInventory(null, 54, player.getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!");
              inv.setContents(content);
              menus.put(UUID.fromString(key), inv);
         });
