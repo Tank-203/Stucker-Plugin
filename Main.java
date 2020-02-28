@@ -60,6 +60,7 @@ public class Main extends JavaPlugin implements Listener{
 		this.getCommand("Launch").setExecutor(new Launch());
 		this.getCommand("Chad").setExecutor(new Chad());
 		this.getCommand("Shelp").setExecutor(new Help());
+		this.getCommand("Why").setExecutor(new Why());
 		if (this.data.getConfig().contains("data"))
             this.restoreInventory();
 	}	
@@ -78,9 +79,22 @@ public class Main extends JavaPlugin implements Listener{
 	
 	@Override
 	public void onDisable() {
-		if (!menus.isEmpty())
-            this.saveInventories();
+		if (!menus.isEmpty()) {
+			this.saveInventories();
+			this.savePlayerInventories();
+		}
 	}	
+	public void savePlayerInventories() {
+		Player player = Bukkit.getPlayer(getName());
+		if (!(player.isOnline())) {
+			for (Map.Entry<UUID, Inventory> entry : menus.entrySet()) {
+		           
+	            Inventory inv = (Inventory) entry.getValue();
+	            this.data.getConfig().set("data." + entry.getKey().toString(), inv.getContents());
+	        }
+	        this.data.saveConfig();
+		}
+	}
 	
 	public void saveInventories() {
         for (Map.Entry<UUID, Inventory> entry : menus.entrySet()) {
