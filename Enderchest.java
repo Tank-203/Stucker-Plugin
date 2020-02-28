@@ -1,5 +1,3 @@
-***Thanks Cmaaxx or CodedRed for most of this Code!****
-
 package me.Tank203.Stucker;
 
 
@@ -31,7 +29,9 @@ public class Enderchest implements Listener{
 		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore())
 				if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-                if (Main.menus.containsKey(player.getUniqueId())) {
+					event.setCancelled(true);
+					player.sendMessage(ChatColor.RED + "I'm sorry, the Enderchest has been temporarily disabled, because of a major bug.");
+                /*if (Main.menus.containsKey(player.getUniqueId())) {
                     // already has a saved inventory
                     player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
                     player.openInventory(Main.menus.get(player.getUniqueId()));
@@ -41,7 +41,7 @@ public class Enderchest implements Listener{
                 Inventory inv = Bukkit.createInventory(player, 54, player.getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!");
                 player.openInventory(inv);
                 player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
-                return;
+                return;*/
             }
     }
 	
@@ -51,7 +51,8 @@ public class Enderchest implements Listener{
 		if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().contains(ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest"))
 			if (player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
 				event.setCancelled(true);
-				if (Main.menus.containsKey(player.getUniqueId())) {
+				player.sendMessage(ChatColor.RED + "I'm sorry, the Enderchest has been temporarily disabled, because of a major bug.");
+				/*if (Main.menus.containsKey(player.getUniqueId())) {
                     // already has a saved inventory
                     player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
                     player.openInventory(Main.menus.get(player.getUniqueId()));
@@ -61,7 +62,7 @@ public class Enderchest implements Listener{
                 Inventory inv = Bukkit.createInventory(player, 54, player.getName() + "'s " + ChatColor.GREEN + "" + ChatColor.BOLD + "EnderChest!");
                 player.openInventory(inv);
                 player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1.0F, 0.8F);
-                return;
+                return;*/
 			}
 	}
 	
