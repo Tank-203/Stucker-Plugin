@@ -57,10 +57,12 @@ public class Main extends JavaPlugin implements Listener{
 		this.getServer().getPluginManager().registerEvents(this, this);
 		this.getServer().getPluginManager().registerEvents(new AC(), this);
 		this.getServer().getPluginManager().registerEvents(new Enderchest(this), this);
+		this.getServer().getPluginManager().registerEvents(new Menu(this), this);
 		this.getCommand("Launch").setExecutor(new Launch());
 		this.getCommand("Chad").setExecutor(new Chad());
 		this.getCommand("Shelp").setExecutor(new Help());
 		this.getCommand("Why").setExecutor(new Why());
+		this.getCommand("Menu").setExecutor(new Menu(this));
 		if (this.data.getConfig().contains("data"))
             this.restoreInventory();
 	}	
